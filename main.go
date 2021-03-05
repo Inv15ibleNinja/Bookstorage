@@ -22,7 +22,7 @@ func GetBooks(w http.ResponseWriter, r *http.Request) {
 }
 
 var (
-	authors = []Author{
+	author = []Author{
 
 		{Name: "Stephen King"},
 		{Name: "John Ronald Reuel Tolkien"},
@@ -34,7 +34,7 @@ var (
 		{Name: "Сергей Васильевич Лукьяненко"},
 	}
 
-	publishers = []Publisher{
+	publisher = []Publisher{
 
 		{Name: "Росмэн"},
 		{Name: "Экспоненента"},
@@ -44,7 +44,7 @@ var (
 		{Name: "Букля"},
 	}
 
-	books = []Book{
+	book = []Book{
 		{Title: "Тёмная башня"},
 		{Title: "Пикник на обочине"},
 		{Title: "Оно"},
@@ -68,17 +68,20 @@ func main() {
 		panic("failed to connect database")
 	}
 	defer db.Close()
+	db.AutoMigrate(&Author{})
+	db.AutoMigrate(&Publisher{})
+	db.AutoMigrate(&Book{})
 
-	for index := range authors {
-		db.Create(&authors[index])
+	for index := range author {
+		db.Create(&author[index])
 	}
 
-	for index := range books {
-		db.Create(&books[index])
+	for index := range book {
+		db.Create(&book[index])
 	}
 
-	for index := range publishers {
-		db.Create(&publishers[index])
+	for index := range publisher {
+		db.Create(&publisher[index])
 	}
 	router.HandleFunc("/books", GetBooks).Methods("GET")
 	//   router.HandleFunc("/cars/{id}", GetCar).Methods("GET")
