@@ -5,8 +5,7 @@ CREATE TABLE "book" (
 
 CREATE TABLE "author" (
   "id" SERIAL PRIMARY KEY,
-  "name" varchar,
-  "continent_name" varchar
+  "name" varchar
 );
 
 CREATE TABLE "publisher" (
