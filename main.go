@@ -36,24 +36,24 @@ func GetBook(w http.ResponseWriter, r *http.Request) {
 var (
 	author = []Author{
 
-		{name: "Stephen King"},
-		{name: "John Ronald Reuel Tolkien"},
-		{name: "George Raymond Richard Martin"},
-		{name: "Александр Сергеевич Пушкин"},
-		{name: "Сергей Васильевич Лукьяненко"},
-		{name: "Аркадий Натанович Стругаций"},
-		{name: "Борис Натанович Стругаций"},
-		{name: "Сергей Васильевич Лукьяненко"},
+		{Name: "Stephen King"},
+		{Name: "John Ronald Reuel Tolkien"},
+		{Name: "George Raymond Richard Martin"},
+		{Name: "Александр Сергеевич Пушкин"},
+		{Name: "Сергей Васильевич Лукьяненко"},
+		{Name: "Аркадий Натанович Стругаций"},
+		{Name: "Борис Натанович Стругаций"},
+		{Name: "Сергей Васильевич Лукьяненко"},
 	}
 
 	publisher = []Publisher{
 
-		{name: "Росмэн"},
-		{name: "Экспоненента"},
-		{name: "МИФ"},
-		{name: "Guardian"},
-		{name: "Special"},
-		{name: "Букля"},
+		{Name: "Росмэн"},
+		{Name: "Экспоненента"},
+		{Name: "МИФ"},
+		{Name: "Guardian"},
+		{Name: "Special"},
+		{Name: "Букля"},
 	}
 
 	book = []Book{
@@ -73,7 +73,8 @@ var (
 var err error
 
 func main() {
-	fmt.Println("start")
+	fmt.Println("start") //debug
+	//коннектимся к бд
 	router := mux.NewRouter()
 	db, err = gorm.Open("postgres", "host=localhost port=5432 user=postgres dbname=Book sslmode=disable password=postgres")
 	if err != nil {
@@ -82,19 +83,23 @@ func main() {
 	}
 	defer db.Close()
 
-	//db.AutoMigrate(&Author{})
-	//db.AutoMigrate(&Publisher{})
+	//добавляем таблицы в бд
+	db.AutoMigrate(&Author{})
+	db.AutoMigrate(&Publisher{})
 	db.AutoMigrate(&Book{})
+
+	//заполняем тестовыми данными
 	for index := range book {
 		db.Create(&book[index])
 	}
-	// for index := range author {
-	// 	db.Create(&author[index])
-	// }
 
-	// for index := range publisher {
-	// 	db.Create(&publisher[index])
-	// }
+	for index := range author {
+		db.Create(&author[index])
+	}
+
+	for index := range publisher {
+		db.Create(&publisher[index])
+	}
 
 	router.HandleFunc("/books", GetBooks).Methods("GET")
 	router.HandleFunc("/book/{id}", GetBook).Methods("GET")
