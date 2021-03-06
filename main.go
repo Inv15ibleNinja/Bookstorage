@@ -10,6 +10,9 @@ import (
 	"github.com/jinzhu/gorm"
 	"github.com/rs/cors"
 
+	// "gorm.io/driver/postgres"
+	// "gorm.io/gorm"
+
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 )
 
@@ -54,40 +57,39 @@ var (
 	}
 
 	book = []Book{
-		{title: "Тёмная башня"},
-		{title: "Пикник на обочине"},
-		{title: "Оно"},
-		{title: "Танец с драконами"},
-		{title: "Песнь льда и пламени"},
-		{title: "Хоббит"},
-		{title: "Властелин колец"},
-		{title: "Руслан и Людмила"},
-		{title: "Дубровский"},
-		{title: "Ночной дозор"},
-		{title: "Спектр"},
+		{Title: "Тёмная башня"},
+		{Title: "Пикник на обочине"},
+		{Title: "Оно"},
+		{Title: "Танец с драконами"},
+		{Title: "Песнь льда и пламени"},
+		{Title: "Хоббит"},
+		{Title: "Властелин колец"},
+		{Title: "Руслан и Людмила"},
+		{Title: "Дубровский"},
+		{Title: "Ночной дозор"},
+		{Title: "Спектр"},
 	}
 )
+var err error
 
 func main() {
 	fmt.Println("start")
 	router := mux.NewRouter()
-	db, err := gorm.Open("postgres", "host=localhost port=5432 user=postgres dbname=Book sslmode=disable password=postgres")
+	db, err = gorm.Open("postgres", "host=localhost port=5432 user=postgres dbname=Book sslmode=disable password=postgres")
 	if err != nil {
 		log.Println(err)
 		panic("failed to connect database")
 	}
 	defer db.Close()
 
-	// db.AutoMigrate(&Author{})
-	// db.AutoMigrate(&Publisher{})
-	// db.AutoMigrate(&Book{})
-
+	//db.AutoMigrate(&Author{})
+	//db.AutoMigrate(&Publisher{})
+	db.AutoMigrate(&Book{})
+	for index := range book {
+		db.Create(&book[index])
+	}
 	// for index := range author {
 	// 	db.Create(&author[index])
-	// }
-
-	// for index := range book {
-	// 	db.Create(&book[index])
 	// }
 
 	// for index := range publisher {
