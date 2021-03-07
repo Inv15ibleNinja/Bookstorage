@@ -18,6 +18,7 @@ import (
 
 var db *gorm.DB
 
+//GetBooks returns list of all books in db
 func GetBooks(w http.ResponseWriter, r *http.Request) {
 	log.Println("GetBooks request")
 	var books []Book
@@ -25,6 +26,7 @@ func GetBooks(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(&books)
 }
 
+//GetBook returns book by book id
 func GetBook(w http.ResponseWriter, r *http.Request) {
 	log.Println("GetBook request")
 	params := mux.Vars(r)
@@ -68,9 +70,134 @@ var (
 		{Title: "Дубровский"},
 		{Title: "Ночной дозор"},
 		{Title: "Спектр"},
+		{Title: "Еще одна книга"},
+		{Title: "Книга без автора 1"},
+		{Title: "Книга без автора 2"},
+		{Title: "Книга без издательства 1"},
+		{Title: "Книга без издательства 2"},
+		{Title: "Еще одна книга без автора"},
+		{Title: "Еще одна книга без издательства"},
+		{Title: "Еще одна книга без автора 2"},
 	}
+
+	book_author = []Book_author{
+
+		{
+			Book_id:   1,
+			Author_id: 1,
+		},
+		{
+			Book_id:   2,
+			Author_id: 6,
+		},
+		{
+			Book_id:   2,
+			Author_id: 7,
+		},
+		{
+			Book_id:   3,
+			Author_id: 1,
+		},
+		{
+			Book_id:   4,
+			Author_id: 3,
+		},
+		{
+			Book_id:   5,
+			Author_id: 3,
+		},
+		{
+			Book_id:   6,
+			Author_id: 2,
+		},
+		{
+			Book_id:   7,
+			Author_id: 2,
+		},
+		{
+			Book_id:   8,
+			Author_id: 4,
+		},
+		{
+			Book_id:   9,
+			Author_id: 4,
+		},
+		{
+			Book_id:   10,
+			Author_id: 10,
+		},
+		{
+			Book_id:   11,
+			Author_id: 10,
+		},
+		{
+			Book_id:   12,
+			Author_id: 1,
+		},
+		{
+			Book_id:   12,
+			Author_id: 5,
+		},
+		{
+			Book_id:   12,
+			Author_id: 3,
+		},
+	}
+
+	book_publisher = []Book_publisher{
+
+		{
+			Book_id:      1,
+			Publisher_id: 1,
+		},
+		{
+			Book_id:      2,
+			Publisher_id: 1,
+		},
+		{
+			Book_id:      3,
+			Publisher_id: 1,
+		},
+		{
+			Book_id:      2,
+			Publisher_id: 1,
+		},
+		{
+			Book_id:      2,
+			Publisher_id: 3,
+		},
+		{
+			Book_id:      3,
+			Publisher_id: 2,
+		},
+
+		{
+			Book_id:      4,
+			Publisher_id: 4,
+		},
+		{
+			Book_id:      4,
+			Publisher_id: 5,
+		},
+		{
+			Book_id:      5,
+			Publisher_id: 6,
+		},
+		{
+			Book_id:      6,
+			Publisher_id: 1,
+		},
+		{
+			Book_id:      7,
+			Publisher_id: 2,
+		},
+		{
+			Book_id:      8,
+			Publisher_id: 4,
+		},
+	}
+	err error
 )
-var err error
 
 func main() {
 	fmt.Println("start") //debug
@@ -84,22 +211,30 @@ func main() {
 	defer db.Close()
 
 	//добавляем таблицы в бд
-	db.AutoMigrate(&Author{})
-	db.AutoMigrate(&Publisher{})
-	db.AutoMigrate(&Book{})
-
+	//db.AutoMigrate(&Author{})
+	//db.AutoMigrate(&Publisher{})
+	//db.AutoMigrate(&Book{})
+	db.AutoMigrate(&Book_author{})
+	db.AutoMigrate(&Book_publisher{})
 	//заполняем тестовыми данными
-	for index := range book {
-		db.Create(&book[index])
+	for i := range book {
+		db.Create(&book[i])
 	}
 
-	for index := range author {
-		db.Create(&author[index])
+	for i := range book_author {
+		db.Create(&book_author[i])
+	}
+	for i := range book_publisher {
+		db.Create(&book_publisher[i])
 	}
 
-	for index := range publisher {
-		db.Create(&publisher[index])
-	}
+	// for i := range author {
+	// 	db.Create(&author[i])
+	// }
+
+	// for i := range publisher {
+	// 	db.Create(&publisher[i])
+	// }
 
 	router.HandleFunc("/books", GetBooks).Methods("GET")
 	router.HandleFunc("/book/{id}", GetBook).Methods("GET")

@@ -1,31 +1,31 @@
 package main
 
 type Book struct {
-	id    int
-	title string
+	Id    int
+	Title string
 }
 
 type Author struct {
-	id   int
-	name string
+	Id   int
+	Name string
 }
 
 type Publisher struct {
-	id   int
-	name string
+	Id   int
+	Name string
 }
 
 type Book_author struct {
-	book_id   int
-	author_id int
+	Book_id   int
+	Author_id int
 }
 
 type Author_publisher struct {
-	author_id    int
-	publisher_id int
+	Author_id    int
+	Publisher_id int
 }
 
 type Book_publisher struct {
-	book_id      int
-	publisher_id int
+	Book_id      int
+	Publisher_id int
 }
