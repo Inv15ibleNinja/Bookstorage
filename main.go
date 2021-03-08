@@ -35,6 +35,24 @@ func GetBook(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(&book)
 }
 
+//GetAuthors returns list of all authors
+func GetAuthors(w http.ResponseWriter, r *http.Request) {
+	log.Println("GetAuthors request")
+	var authors Author
+	db.Find(&authors)
+	json.NewEncoder(w).Encode(&authors)
+}
+
+//GetAuthor returns author by id
+func GetAuthor(w http.ResponseWriter, r *http.Request) {
+	log.Println("GetAuthor request")
+	params := mux.Vars(r)
+	var author Author
+	db.First(&author, params["id"])
+	json.NewEncoder(w).Encode(&author)
+
+}
+
 var (
 	author = []Author{
 
@@ -214,24 +232,21 @@ func main() {
 	//db.AutoMigrate(&Author{})
 	//db.AutoMigrate(&Publisher{})
 	//db.AutoMigrate(&Book{})
-	db.AutoMigrate(&Book_author{})
-	db.AutoMigrate(&Book_publisher{})
+	//db.AutoMigrate(&Book_author{})
+	//db.AutoMigrate(&Book_publisher{})
 	//заполняем тестовыми данными
-	for i := range book {
-		db.Create(&book[i])
-	}
-
-	for i := range book_author {
-		db.Create(&book_author[i])
-	}
-	for i := range book_publisher {
-		db.Create(&book_publisher[i])
-	}
-
+	// for i := range book {
+	// 	db.Create(&book[i])
+	// }
+	// for i := range book_author {
+	// 	db.Create(&book_author[i])
+	// }
+	// for i := range book_publisher {
+	// 	db.Create(&book_publisher[i])
+	// }
 	// for i := range author {
 	// 	db.Create(&author[i])
 	// }
-
 	// for i := range publisher {
 	// 	db.Create(&publisher[i])
 	// }
